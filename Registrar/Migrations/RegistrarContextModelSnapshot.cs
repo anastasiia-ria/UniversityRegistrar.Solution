@@ -23,6 +23,9 @@ namespace Registrar.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -30,6 +33,8 @@ namespace Registrar.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CourseId");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Courses");
                 });
@@ -55,10 +60,27 @@ namespace Registrar.Migrations
                     b.ToTable("CourseStudent");
                 });
 
+            modelBuilder.Entity("Registrar.Models.Department", b =>
+                {
+                    b.Property<int>("DepartmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("DepartmentId");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("Registrar.Models.Student", b =>
                 {
                     b.Property<int>("StudentId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EnrollmentDate")
@@ -69,7 +91,20 @@ namespace Registrar.Migrations
 
                     b.HasKey("StudentId");
 
+                    b.HasIndex("DepartmentId");
+
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("Registrar.Models.Course", b =>
+                {
+                    b.HasOne("Registrar.Models.Department", "Department")
+                        .WithMany("Courses")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Registrar.Models.CourseStudent", b =>
@@ -91,9 +126,27 @@ namespace Registrar.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("Registrar.Models.Student", b =>
+                {
+                    b.HasOne("Registrar.Models.Department", "Department")
+                        .WithMany("Students")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
             modelBuilder.Entity("Registrar.Models.Course", b =>
                 {
                     b.Navigation("JoinEntities");
+                });
+
+            modelBuilder.Entity("Registrar.Models.Department", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("Registrar.Models.Student", b =>
