@@ -10,10 +10,10 @@ namespace Registrar.Models
     }
 
     public int CourseId { get; set; }
-
-    // public string FullName => string.Format("{0} {1}", Name, Number) { get; set; }
     public string Name { get; set; }
     public int Number { get; set; }
+    public int DepartmentId { get; set; }
+    public virtual Department Department { get; set; }
     public virtual ICollection<CourseStudent> JoinEntities { get; set; }
   }
 }
