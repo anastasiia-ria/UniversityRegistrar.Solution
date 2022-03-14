@@ -25,6 +25,7 @@ namespace Registrar.Controllers
     {
       var courses = _db.Courses.Select(course => new { CourseId = course.CourseId, FullName = string.Format("{0}{1}", course.Name, course.Number) }).ToList();
       ViewBag.CourseId = new SelectList(courses, "CourseId", "FullName");
+      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "Name");
       return View();
     }
 
@@ -53,7 +54,9 @@ namespace Registrar.Controllers
     public ActionResult Edit(int id)
     {
       var thisStudent = _db.Students.FirstOrDefault(student => student.StudentId == id);
-      ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
+      var courses = _db.Courses.Select(course => new { CourseId = course.CourseId, FullName = string.Format("{0}{1}", course.Name, course.Number) }).ToList();
+      ViewBag.CourseId = new SelectList(courses, "CourseId", "FullName");
+      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "Name");
       return View(thisStudent);
     }
 

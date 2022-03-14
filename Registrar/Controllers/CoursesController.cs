@@ -19,11 +19,13 @@ namespace Registrar.Controllers
     public ActionResult Index()
     {
       List<Course> model = _db.Courses.ToList();
+      ViewBag.DepartmentNum = _db.Departments.ToList().Count();
       return View(model);
     }
 
     public ActionResult Create()
     {
+      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "Name");
       return View();
     }
 
@@ -46,6 +48,7 @@ namespace Registrar.Controllers
     public ActionResult Edit(int id)
     {
       var thisCourse = _db.Courses.FirstOrDefault(course => course.CourseId == id);
+      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "Name");
       return View(thisCourse);
     }
 
