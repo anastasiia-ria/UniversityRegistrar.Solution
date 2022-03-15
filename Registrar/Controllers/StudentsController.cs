@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Registrar.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Registrar.Controllers
 {
@@ -76,21 +77,47 @@ namespace Registrar.Controllers
     {
       var thisStudent = _db.Students.FirstOrDefault(student => student.StudentId == id);
       var courses = _db.Courses.Select(course => new { CourseId = course.CourseId, FullName = string.Format("{0}{1}", course.Name, course.Number) }).ToList();
+      var status = new List<SelectListItem>();
+      status.Add(new SelectListItem() { Text = "Completed", Value = "Completed" });
+      status.Add(new SelectListItem() { Text = "Incomplete", Value = "Incomplete" });
+      ViewBag.Status = status;
       ViewBag.CourseId = new SelectList(courses, "CourseId", "FullName");
       return View(thisStudent);
     }
 
     [HttpPost]
-    public ActionResult AddCourse(Student student, int CourseId)
+    public ActionResult AddCourse(Student student, string Status, int CourseId)
     {
       if (CourseId != 0)
       {
-        _db.CourseStudent.Add(new CourseStudent() { CourseId = CourseId, StudentId = student.StudentId });
+        _db.CourseStudent.Add(new CourseStudent() { CourseId = CourseId, StudentId = student.StudentId, Status = Status });
         _db.SaveChanges();
       }
+
       return RedirectToAction("Index");
     }
 
+    public ActionResult EditCourses(int id)
+    {
+      var thisStudent = _db.Students.FirstOrDefault(student => student.StudentId == id);
+      var status = new List<SelectListItem>();
+      status.Add(new SelectListItem() { Text = "Completed", Value = "Completed" });
+      status.Add(new SelectListItem() { Text = "Incomplete", Value = "Incomplete" });
+      ViewBag.Status = status;
+      return View(thisStudent);
+    }
+
+    [HttpPost]
+    public ActionResult EditCourses(int CourseStudentId, string Status)
+    {
+      var thisCourseStudent = _db.CourseStudent.FirstOrDefault(coursestudent => coursestudent.CourseStudentId == CourseStudentId);
+      thisCourseStudent.Status = Status;
+      _db.Entry(thisCourseStudent).State = EntityState.Modified;
+      // thisCourseStudent.Status = Status;
+      _db.SaveChanges();
+
+      return RedirectToAction("Details", new { id = thisCourseStudent.StudentId });
+    }
     public ActionResult Delete(int id)
     {
       var thisStudent = _db.Students.FirstOrDefault(student => student.StudentId == id);
