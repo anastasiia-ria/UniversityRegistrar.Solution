@@ -1,0 +1,31 @@
+@{
+  Layout = "_Layout";
+}
+
+@model Registrar.Models.Student
+
+<h2>Edit courses</h2>
+
+<h4>Edit courses of this student: @Html.DisplayFor(model => model.Name)</h4>
+
+<ul>
+@foreach(var join in Model.JoinEntities)
+{
+  <li>@join.Course.Name</li>
+  @using (Html.BeginForm())
+  { 
+    @* @Html.HiddenFor(model => model.StudentId) *@
+    @Html.Hidden("CourseStudentId", @join.CourseStudentId)
+    @Html.Label("Select Status")
+    @Html.DropDownList("Status")
+    <input type="submit" value="Save" />
+  }
+  @using (Html.BeginForm("DeleteCourse", "Students"))
+  {
+    @Html.Hidden("joinId", @join.CourseStudentId)
+    <input type="submit" value="Delete"/>
+  }
+}
+</ul>
+
+<p>@Html.ActionLink("Back to list", "Index")</p>
