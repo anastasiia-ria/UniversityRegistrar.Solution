@@ -48,6 +48,9 @@ namespace Registrar.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
