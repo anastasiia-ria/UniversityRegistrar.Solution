@@ -15,16 +15,27 @@
 }
 else
 {
-  <h4>Courses the student belongs to:</h4>
-
-  <ul>
-  @foreach(var join in Model.JoinEntities)
-  {
-    <li>@join.Course.Name | @join.Status </li>
-  }
-  </ul>
+  <div class="table">
+    <ul>
+      <li class="column-header">Completed Courses</li>
+      @foreach(var join in Model.JoinEntities)
+      {
+        if (join.Status == "Completed") {
+          <li>@join.Course.Name </li>
+        }
+      }
+    </ul>
+    <ul>
+      <li class="column-header">Incomplete Courses</li>
+      @foreach(var join in Model.JoinEntities)
+      {
+        if (join.Status == "Incomplete") {
+          <li>@join.Course.Name@join.Course.Number </li>
+        }
+      }
+    </ul>
+  </div>
 }
-
 <p>@Html.ActionLink("Edit Courses", "EditCourses", new { id = Model.StudentId })</p>
 <p>@Html.ActionLink("Add a Course", "AddCourse", new { id = Model.StudentId })</p>
 

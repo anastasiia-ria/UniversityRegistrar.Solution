@@ -36,6 +36,7 @@ else
       <li>@Html.ActionLink($"{course.Name}", "Details", "Courses", new {id = course.CourseId})</li>
     }
   </ul>
+  <p>There are @ViewBag.Count incomplete courses in this department</p>
 }
 <p>@Html.ActionLink("Add a Course", "AddCourse", new { id = Model.DepartmentId })</p>
 
