@@ -113,7 +113,6 @@ namespace Registrar.Controllers
       var thisCourseStudent = _db.CourseStudent.FirstOrDefault(coursestudent => coursestudent.CourseStudentId == CourseStudentId);
       thisCourseStudent.Status = Status;
       _db.Entry(thisCourseStudent).State = EntityState.Modified;
-      // thisCourseStudent.Status = Status;
       _db.SaveChanges();
 
       return RedirectToAction("Details", new { id = thisCourseStudent.StudentId });

@@ -37,18 +37,7 @@ namespace Registrar.Controllers
     public ActionResult Details(int id)
     {
       var thisDepartment = _db.Departments.FirstOrDefault(Department => Department.DepartmentId == id);
-      var IncompleteList = _db.CourseStudent.Where(coursestudent => coursestudent.Status == "Incomplete").ToList();
-
-      // var count = _db.Departments.Where(dep => dep.DepartmentId == id);
-
-      var count = 0;
-      foreach (var item in IncompleteList)
-      {
-        if (_db.Courses.Where(course => course.CourseId == item.CourseId && course.DepartmentId == id).Any())
-        {
-          count++;
-        }
-      }
+      var count = _db.CourseStudent.Where(cs => cs.Course.DepartmentId == id && cs.Status == "Incomplete").ToList().Count();
       ViewBag.Count = count;
       return View(thisDepartment);
     }
